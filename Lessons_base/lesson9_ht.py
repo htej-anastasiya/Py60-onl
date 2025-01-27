@@ -140,10 +140,8 @@ def convert_json_to_csv(json):
 def search_employee_by_name(json_file):
     employee_name = input("Input employee name: ")
     for person_info in json_file:
-        if employee_name == person_info["name"]:
+        if employee_name in person_info["name"]:
             return person_info
-        else:
-            "Not found"
 
 
 def search_by_prog_lang(json_file):
@@ -204,7 +202,7 @@ def main_menu():
         elif select_option == 5:
             search_name = convert_from_json_to_python_object(FOLDER, FILE)
             result = search_employee_by_name(search_name)
-            if result != "Not found":
+            if result is not None:
                 print("Employee found:", result)
             else:
                 print("Employee not found")
