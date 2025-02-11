@@ -1,5 +1,5 @@
 import psycopg2
-from config import DB_CONFIG
+from db.config import DB_CONFIG
 
 class DbConnection:
     def __enter__(self):

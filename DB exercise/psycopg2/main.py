@@ -1,5 +1,5 @@
 from datetime import datetime
-from db_queries import select_songs_from_album, select_songs_by_name, add_artist, add_album, add_song, \
+from db.db_queries import select_songs_from_album, select_songs_by_name, add_artist, add_album, add_song, \
     update_song_title, delete_song_by_title, get_artists_list, get_albums_by_band_name
 
 while True:

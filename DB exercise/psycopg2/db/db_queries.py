@@ -1,5 +1,5 @@
 from datetime import datetime
-from db_connect import DbConnection
+from db.db_connect import DbConnection
 
 def select_songs_from_album(query):
     with DbConnection() as cursor:
