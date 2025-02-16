@@ -44,11 +44,38 @@ albums_data = [
     ('Chaos A.D.', 1993, 'Sepultura'),
     ('Roots', 1996, 'Sepultura'),
     ('Machine Messiah', 2017, 'Sepultura'),
-    ('Stranger Fruit', 2018, 'Zeal&Ardor'),
-    ('Wake of a Nation', 2020, 'Zeal&Ardor'),
-    ('Zeal & Ardor', 2022, 'Zeal&Ardor'),
+    ('Stranger Fruit', 2018, 'Zeal & Ardor'),
+    ('Wake of a Nation', 2020, 'Zeal & Ardor'),
+    ('Zeal & Ardor', 2022, 'Zeal & Ardor'),
 ]
 
-engine = create_engine("postgresql://nastya@localhost/testdb2")
+engine = create_engine("postgresql://nastya@localhost/testdb2", echo=True)
 
-def select_data():
+def select_data(artist):
+    with Session(bind=engine) as db_session:
+        artist = db_session.query(Artist).filter(Artist.name == artist).first()
+        if artist:
+            return artist.id
+        else:
+            return None
+
+def insert_data(data):
+    with Session(autoflush=False, bind=engine) as db_session:
+        try:
+            for album_name, release_year, artist_name in albums_data:
+                artist_id=select_data(artist_name)
+                if artist_id:
+                    new_album = Album(name=album_name, release_year=release_year, artist_id=artist_id)
+                    db_session.add(new_album)
+                else:
+                    print(f"Artist '{artist_name}' not found. Skipping album '{album_name}'.")
+            db_session.commit()
+            print("Data was successfully inserted into DB")
+        except SQLAlchemyError as e:
+            db_session.rollback()
+            print(f"Error during data insertion {e}")
+        finally:
+            db_session.close()
+
+if __name__ == "__main__":
+    insert_data(albums_data)

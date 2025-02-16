@@ -20,6 +20,9 @@ class Artist(Base):
     name = Column(String, nullable=False)
     country = Column(String)
 
+    albums = relationship("Album", back_populates="artist")
+    songs = relationship("Song", back_populates="artist")
+
 
 class Album(Base):
     __tablename__ = "albums"
@@ -29,6 +32,7 @@ class Album(Base):
     artist_id = Column(Integer, ForeignKey('artists.id'), nullable=False)
 
     artist = relationship("Artist", back_populates="albums")
+    songs = relationship("Song", back_populates="album")
 
 
 class Song(Base):
