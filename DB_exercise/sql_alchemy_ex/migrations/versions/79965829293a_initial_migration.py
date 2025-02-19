@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 6dd457fb3a4a
+Revision ID: 79965829293a
 Revises: 
-Create Date: 2025-02-19 13:39:18.411871
+Create Date: 2025-02-19 21:01:11.143858
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '6dd457fb3a4a'
+revision: str = '79965829293a'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,7 +24,8 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('country', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name', name='uq_artist_name')
     )
     op.create_table('albums',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -32,7 +33,8 @@ def upgrade() -> None:
     sa.Column('release_year', sa.Integer(), nullable=True),
     sa.Column('artist_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['artist_id'], ['artists.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('artist_id', 'name', name='uq_album_artist_name')
     )
     op.create_table('songs',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),

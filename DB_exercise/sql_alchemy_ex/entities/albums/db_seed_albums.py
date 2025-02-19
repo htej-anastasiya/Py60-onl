@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from db_schema import Album, Artist, Song
 from sqlalchemy.orm import Session
+from entities.session_manager import DataBaseSessionManager
 
 albums_data = [
     ('Master of Puppets', 1986, 'Metallica'),
@@ -49,10 +50,9 @@ albums_data = [
     ('Zeal & Ardor', 2022, 'Zeal & Ardor'),
 ]
 
-engine = create_engine("postgresql://nastya@localhost/testdb2", echo=True)
 
 def select_data(artist):
-    with Session(bind=engine) as db_session:
+    with DataBaseSessionManager() as db_session:
         artist = db_session.query(Artist).filter(Artist.name == artist).first()
         if artist:
             return artist.id
@@ -60,22 +60,17 @@ def select_data(artist):
             return None
 
 def insert_data(data):
-    with Session(autoflush=False, bind=engine) as db_session:
-        try:
-            for album_name, release_year, artist_name in albums_data:
-                artist_id=select_data(artist_name)
-                if artist_id:
-                    new_album = Album(name=album_name, release_year=release_year, artist_id=artist_id)
-                    db_session.add(new_album)
-                else:
-                    print(f"Artist '{artist_name}' not found. Skipping album '{album_name}'.")
+    with DataBaseSessionManager() as db_session:
+        for album_name, release_year, artist_name in albums_data:
+            artist_id=select_data(artist_name)
+            if artist_id:
+                new_album = Album(name=album_name, release_year=release_year, artist_id=artist_id)
+                db_session.add(new_album)
+            else:
+                print(f"Artist '{artist_name}' not found. Skipping album '{album_name}'.")
             db_session.commit()
-            print("Data was successfully inserted into DB")
-        except SQLAlchemyError as e:
-            db_session.rollback()
-            print(f"Error during data insertion {e}")
-        finally:
-            db_session.close()
+        print("Data was successfully inserted into DB")
+
 
 if __name__ == "__main__":
     insert_data(albums_data)

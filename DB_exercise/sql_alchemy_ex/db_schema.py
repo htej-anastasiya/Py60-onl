@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy import Column, Integer, String, Interval
 
@@ -16,6 +16,7 @@ class Artist(Base):
 
     albums = relationship("Album", back_populates="artist")
     songs = relationship("Song", back_populates="artist")
+    __table_args__ = (UniqueConstraint('name', name='uq_artist_name'),)
 
 
 class Album(Base):
@@ -27,6 +28,7 @@ class Album(Base):
 
     artist = relationship("Artist", back_populates="albums")
     songs = relationship("Song", back_populates="album")
+    __table_args__ = (UniqueConstraint('artist_id', 'name', name='uq_album_artist_name'),)
 
 
 class Song(Base):

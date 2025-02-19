@@ -1,11 +1,6 @@
-from sqlalchemy import create_engine
-from db_seed_albums import select_data
-from sqlalchemy.exc import SQLAlchemyError
-
-from db_schema import Album, Artist, Song
-from sqlalchemy.orm import Session
-
-engine = create_engine("postgresql://nastya@localhost/testdb2", echo=True)
+from entities.albums.db_seed_albums import select_data
+from db_schema import Album, Song
+from entities.session_manager import DataBaseSessionManager
 
 songs_data = [
     ('Battery', '00:03:12', 'Master of Puppets', 'Metallica'),
@@ -87,7 +82,7 @@ songs_data = [
 
 
 def select_album_id_by_name(album):
-    with Session(bind=engine) as db:
+    with DataBaseSessionManager() as db:
         album_name = db.query(Album).filter(Album.name == album).first()
         if album_name:
             return album_name.id
@@ -95,23 +90,17 @@ def select_album_id_by_name(album):
 
 
 def insert_data(data):
-    with Session(autoflush=False, bind=engine) as db_session:
-        try:
-            for song_name, duration, album_name, artist_name in songs_data:
-                artist_id = select_data(artist_name)
-                album_id = select_album_id_by_name(album_name)
-                if album_id and artist_id:
-                    new_song = Song(title=song_name, duration=duration, album_id=album_id, artist_id=artist_id)
-                    db_session.add(new_song)
-                else:
-                    print(f"Artist '{artist_name}' and {album_name} not found. Skipping song '{song_name}'.")
+    with DataBaseSessionManager() as db_session:
+        for song_name, duration, album_name, artist_name in data:
+            artist_id = select_data(artist_name)
+            album_id = select_album_id_by_name(album_name)
+            if album_id and artist_id:
+                new_song = Song(title=song_name, duration=duration, album_id=album_id, artist_id=artist_id)
+                db_session.add(new_song)
+            else:
+                print(f"Artist '{artist_name}' and {album_name} not found. Skipping song '{song_name}'.")
             db_session.commit()
-            print("Data was successfully inserted into DB")
-        except SQLAlchemyError as e:
-            db_session.rollback()
-            print(f"Error during data insertion {e}")
-        finally:
-            db_session.close()
+        print("Data was successfully inserted into DB")
 
 if __name__ == "__main__":
     insert_data(songs_data)

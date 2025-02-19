@@ -1,10 +1,6 @@
-from sqlalchemy import create_engine
-from sqlalchemy.exc import SQLAlchemyError
+from db_schema import Artist
+from entities.session_manager import DataBaseSessionManager
 
-from db_schema import Album, Artist, Song
-from sqlalchemy.orm import Session
-
-engine = create_engine("postgresql://nastya@localhost/testdb2")
 
 artists_data = [
     Artist(name='Metallica', country='USA'),
@@ -26,16 +22,10 @@ artists_data = [
 
 #function which creates session for DB connection, inserts data  with Exception SQLAlchemyError
 def insert_data(data):
-    with Session(autoflush=False, bind=engine) as db:
-        try:
-            db.add_all(data)
-            db.commit()
-            print("Data was inserted into DB")
-        except SQLAlchemyError as e:
-            db.rollback()
-            print(f"Error during data insertion {e}")
-        finally:
-            db.close()
+    with DataBaseSessionManager() as db:
+        db.add_all(data)
+        db.commit()
+        print("Data was inserted into DB")
 
 
 if __name__ == "__main__":
