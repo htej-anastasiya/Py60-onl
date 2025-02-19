@@ -4,12 +4,6 @@ from sqlalchemy import Column, Integer, String, Interval
 
 engine = create_engine("postgresql://nastya@localhost/testdb2")
 
-"""Для создания моделей необходима базовая модель, от которой потом наследуются остальные модели
-Классы, которые наследуются от класса базовой модели, будут сопоставляться с таблицами в базе данных. 
-Для сопоставления класса с определенной таблицей в БД применяется атрибут класса __tablename__.
-"""
-
-
 class Base(DeclarativeBase):
     pass
 
@@ -47,4 +41,4 @@ class Song(Base):
     album = relationship("Album", back_populates="songs")
 
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
