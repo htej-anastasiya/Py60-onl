@@ -54,9 +54,3 @@ class ArtistService:
         except SQLAlchemyError as e:
             print(f'Error while adding artist: {e}')
 
-artists = ArtistService()
-# new = artists.get_all_artists_list()
-# for artist in new:
-#     print(artist.name, artist.country)
-country1 = artists.update_artist_country('Pantera', 'USA')
-print(country1)
