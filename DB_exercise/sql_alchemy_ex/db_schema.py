@@ -41,6 +41,7 @@ class Song(Base):
 
     artist = relationship("Artist", back_populates="songs")
     album = relationship("Album", back_populates="songs")
+    __table_args__ = (UniqueConstraint('title', 'album_id','artist_id',  name='uq_album_artist_song_name'),)
 
 
 # Base.metadata.create_all(bind=engine)

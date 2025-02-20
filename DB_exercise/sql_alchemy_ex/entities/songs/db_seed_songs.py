@@ -105,4 +105,3 @@ def insert_data(data):
 if __name__ == "__main__":
     insert_data(songs_data)
 
-# print(select_album_id_by_name('Stranger Fruit'))
