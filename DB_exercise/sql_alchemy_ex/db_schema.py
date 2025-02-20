@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, relationship
 from sqlalchemy import Column, Integer, String, Interval
+from entities.connection_strings import engine
 
-engine = create_engine("postgresql://nastya@localhost/testdb2")
 
 class Base(DeclarativeBase):
     pass
