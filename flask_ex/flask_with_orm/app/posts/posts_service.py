@@ -20,3 +20,14 @@ class PostsService(BaseService):
             return None
         return post
 
+    def edit_post(self, post_id, updated_post:dict):
+        post = self.query(Post).filter(Post.id == post_id).first()
+        post.title = updated_post["new_title"]
+        post.content =updated_post["new_content"]
+        post.updated_at=updated_post["updated_at"]
+        self.add_to_session(post)
+        self.commit()
+        self.refresh_obj(post)
+        return post
+
+

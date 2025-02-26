@@ -1,5 +1,7 @@
+from flask import redirect, url_for
+
 from app import app
 
 @app.route("/")
 def index():
-    return "Hello world"
+    return redirect(url_for('get_posts'))
