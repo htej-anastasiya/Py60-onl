@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .post {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            color: #2980b9;
+            margin-top: 0;
+        }
+
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-link {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .post-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-posts {
+            display: flex;              /* Enable flex layout */
+            justify-content: center;    /* Center horizontally */
+            align-items: center;        /* Center vertically */
+            height: 90vh;              /* Set a height to see vertical centering */
+            text-align: center;         /* Ensures multi-line text is centered */
+            color: #2980b9;
+            font-style: normal;
+            font-size: 1.5em;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+{% if post %}
+<div class="post">
+    <h2 class="post-title">{{ post.title }}</h2>
+    <div class="post-meta">
+        Posted on {{ post.created_at }}
+    </div>
+    <div class="post-content">
+        {{ post.content }}
+    </div>
+</div>
+{%else%}
+<p class="no-posts">Sorry, but post you are looking for is not found </p>
+{%endif%}
+</body>
+</html>

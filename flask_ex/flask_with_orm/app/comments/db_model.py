@@ -6,12 +6,13 @@ from sqlalchemy import Column, Integer, String, Interval, DateTime
 
 
 
+
 class Comment(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True, autoincrement=True)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
     content = Column(String)
     created_at = Column(DateTime)
-    post = relationship('Post', back_populates='comments')
+    posts = relationship('Post', back_populates='comments')
 
 
