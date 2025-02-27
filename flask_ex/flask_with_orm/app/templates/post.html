@@ -50,7 +50,11 @@
         }
 
         .post-link:hover {
-            text-decoration: underline;
+            text-decoration: none;
+        }
+        .button-group a {
+        display: inline-block;
+        margin-right: 10px;
         }
 
         .btn-update {
@@ -66,7 +70,19 @@
         .btn-update:hover {
             background-color: #3498db;
         }
-
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
         .no-posts {
             display: flex;              /* Enable flex layout */
             justify-content: center;    /* Center horizontally */
@@ -95,8 +111,9 @@
     <div class="post-content">
         {{ post.content }}
     </div>
-    <div class="form-group">
+    <div class="form-group button-group">
     <a href="{{ url_for('get_update_post_page', post_id=post.id) }}" class="btn-update">Update Post</a>
+    <a href="{{ url_for('get_delete_post_page', post_id=post.id) }}" class="btn-delete">Delete Post</a>
     </div>
 </div>
 {%else%}

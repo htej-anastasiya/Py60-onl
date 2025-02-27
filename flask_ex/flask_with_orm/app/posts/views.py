@@ -54,4 +54,14 @@ def update_post(post_id):
     posts_serv.edit_post(post_id,updated_post)
     return redirect(url_for('get_posts'))
 
+@app.route('/posts/<post_id>/delete', methods=["Get"])
+def get_delete_post_page(post_id):
+    posts_srv = PostsService()
+    post = posts_srv.get_post_by_id(post_id)
+    return render_template("delete-post.html", title="Delete post", post=post, post_id=post.id)
 
+@app.route('/posts/<post_id>/delete', methods=["POST"])
+def delete_post(post_id):
+    posts_srv=PostsService()
+    remove_post=posts_srv.delete_post(post_id)
+    return redirect(url_for('get_posts'))

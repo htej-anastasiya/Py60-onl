@@ -30,4 +30,8 @@ class PostsService(BaseService):
         self.refresh_obj(post)
         return post
 
+    def delete_post(self, post_id):
+        post = self.query(Post).filter(Post.id == post_id).first()
+        self.delete_from_session(post)
+        self.commit()
 
