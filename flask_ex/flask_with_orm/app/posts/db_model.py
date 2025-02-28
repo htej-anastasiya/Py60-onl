@@ -14,7 +14,7 @@ class Post(Base):
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
     author_id = Column(Integer)
-    comments = relationship('Comment', back_populates='posts')
+    comments = relationship('Comment', back_populates='posts', cascade="all, delete-orphan")
 
     __table_args__ = (UniqueConstraint('title', name='uq_post_title'),)
 
