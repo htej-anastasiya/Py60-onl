@@ -7,6 +7,7 @@ from datetime import datetime
 app = Flask(__name__, template_folder=os.path.abspath('app/templates'))
 from app.base import views
 from app.posts import views
+from app.comments import views
 
 
 

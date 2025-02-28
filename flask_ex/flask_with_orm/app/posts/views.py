@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from flask import render_template, redirect, url_for, request
 from app import app
 from app.posts.posts_service import PostsService
@@ -16,8 +15,8 @@ def get_post(post_id):
     posts_serv = PostsService()
     post = posts_serv.get_post_by_id(post_id)
     if post is None:
-        return render_template("post.html", title="Not found", post=post)
-    return render_template("post.html", title=post.title, post=post)
+        return render_template("post.html", title="Not found", post=post,  post_id=post.id)
+    return render_template("post.html", title=post.title, post=post, post_id=post.id)
 
 
 @app.route('/new-post',methods=["GET"])

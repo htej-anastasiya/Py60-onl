@@ -1,5 +1,6 @@
 from app.base.baseservice import BaseService
 from app.posts.db_model import Post
+from sqlalchemy.orm import joinedload
 
 
 class PostsService(BaseService):
@@ -15,10 +16,11 @@ class PostsService(BaseService):
         return new_post
 
     def get_post_by_id(self, post_id):
-        post = self.query(Post).filter(Post.id==post_id).first()
+        post = self.query(Post).options(joinedload(Post.comments)).filter(Post.id==post_id).first()
         if not post:
             return None
-        return post
+        else:
+            return post
 
     def edit_post(self, post_id, updated_post:dict):
         post = self.query(Post).filter(Post.id == post_id).first()
