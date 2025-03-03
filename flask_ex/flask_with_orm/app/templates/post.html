@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .post {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            color: #2980b9;
+            margin-top: 0;
+        }
+
+        .post-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+        }
+
+        .post-link {
+            display: inline-block;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .post-link:hover {
+            text-decoration: none;
+        }
+
+        .button-group a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .btn-update {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn-update:hover {
+            background-color: #3498db;
+        }
+
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .btn-delete:hover {
+            background-color: #c0392b;
+        }
+
+        .no-posts {
+            display: flex; /* Enable flex layout */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 90vh; /* Set a height to see vertical centering */
+            text-align: center; /* Ensures multi-line text is centered */
+            color: #2980b9;
+            font-style: normal;
+            font-size: 1.5em;
+            font-weight: normal;
+        }
+
+        /* Add these styles to your existing CSS */
+
+        .comments-section {
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            position: relative; /* This will help with positioning the button */
+        }
+
+        .comments-section h3 {
+            display: inline-block; /* Makes the heading take only the space it needs */
+            margin-right: 20px;
+        }
+
+        .btn-comment {
+            position: absolute;
+            right: 0;
+            top: 20px; /* Aligns with the Comments heading */
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .btn-comment:hover {
+            background-color: #3498db;
+        }
+
+        .comment {
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #2980b9;
+            border-bottom: 1px solid #ddd; /* This adds the separation line */
+        }
+
+        .comment:last-child {
+            margin-bottom: 0;
+        }
+
+        .comment-meta {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .comment-content {
+            color: #333;
+        }
+
+        .no-comments {
+            color: #7f8c8d;
+            font-style: italic;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+{% if post %}
+<div class="post">
+    <h2 class="post-title">{{ post.title }}</h2>
+    <div class="post-meta">
+        {% if not post.updated_at%}
+        Posted on {{ post.created_at|strftime('%Y-%m-%d %H:%M') }}
+        {% else%}
+        Posted on {{ post.created_at|strftime('%Y-%m-%d %H:%M') }}
+        <p>Last update {{ post.updated_at|strftime('%Y-%m-%d %H:%M') }}
+        <p>
+            {%endif%}
+    </div>
+    <div class="post-content">
+        {{ post.content }}
+    </div>
+    <div class="form-group button-group">
+        <a href="{{ url_for('get_update_post_page', post_id=post.id) }}" class="btn-update">Update Post</a>
+        <a href="{{ url_for('get_delete_post_page', post_id=post.id) }}" class="btn-delete">Delete Post</a>
+    </div>
+    <div class="comments-section">
+        <br>
+        <h3>Comments</h3>
+        <a href="{{ url_for('get_add_comment_page', post_id=post.id) }}" class="btn-comment">Add Comment</a>
+        {% if post.comments %}
+        {% for comment in post.comments|sort(attribute='created_at', reverse=True) %}
+        <div class="comment">
+            <div class="comment-meta">
+                Posted on {{ comment.created_at|strftime('%Y-%m-%d %H:%M') }}
+            </div>
+            <div class="comment-content">
+                {{ comment.content }}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </div>
+    {%else%}
+    <p class="no-posts">Sorry, but post you are looking for is not found </p>
+    {%endif%}
+    </div>
+</body>
+</html>
