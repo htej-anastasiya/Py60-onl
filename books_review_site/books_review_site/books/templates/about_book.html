@@ -1,11 +1,55 @@
-{%extends "base.html"%}
-{%block content%}
-<div class="card">
-      <div class="card-header">
-          <b>"{{ book_info.title }}"</b> by <b><a href="#">{{ book_info.author }}</a></b>
-      </div>
-      <div class="card-body">
-        <p class="card-text">{{ book_info.description}}</p>
-      </div>
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="card border-success mb-3">
+    <div class="row g-0">
+        <div class="card-header">
+            <b>"{{ book_info.title }}"</b> by <b>{{ book_info.author }}</b>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ book_info.description}}</p>
+            <div class="text-end">
+                <a href="{% url 'book_reviews:add_review' book_id=book_info.id %}" class="btn btn-success">Add review</a>
+            </div>
+        </div>
     </div>
-{%endblock content%}
+</div>
+<br>
+{% if review %}
+<br>
+{% for i in review %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{i.title}}</h5>
+        <p class="card-text">{{i.description}}</p>
+        {% if i.update_date|date:"Y-m-d H:i" != i.create_date|date:"Y-m-d H:i" %}
+        <p class="card-text"><small class="text-body-secondary">{{i.create_date}} by {{i.review_author}}</small></p>
+        <p class="card-text"><small class="text-body-secondary">Review updated {{i.update_date}}</small></p>
+        {% else %}
+        <p class="card-text"><small class="text-body-secondary">{{i.create_date}} by {{i.review_author}}</small></p>
+        {% endif %}
+        <a href="{% url 'book_reviews:update_review' book_id=book_info.id pk=i.id %}" class="btn btn-success me-2">Update review</a>
+        <a href="{% url 'book_reviews:delete_review' book_id=book_info.id pk=i.id %}" class="btn btn-success me-2">Delete review</a>
+
+        <hr>
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'book_reviews:show_more_review' book_id=book_info.id pk=i.id %}" class="btn btn-success">Show comments</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">This book has no reviews yet... Be the first reviewer.</p>
+    </div>
+</div>
+{% endif %}
+<script>
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
+</script>
+{% endblock content %}

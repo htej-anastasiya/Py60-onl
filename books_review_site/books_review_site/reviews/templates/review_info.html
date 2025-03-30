@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<br>
+<div class="card border-success mb-3">
+    <div class="row g-0">
+        <div class="card-header">
+            <b>"{{ review_view.title }}"</b>
+            <p class="card-text"><small class="text-header-secondary"> - {{ review_view.book.title }} -</small></p>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ review_view.description}}</p>
+            <div class="text-end">
+                <button class="btn btn-success" id="showCommentForm">Add comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3" id="commentFormCard" style="display: none;">
+    <div class="card-body">
+        <h5 class="card-title">Add Your Comment</h5>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <textarea class="form-control" name="content" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="button" class="btn btn-secondary" id="cancelComment">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<br>
+{% if comment %}
+<br>
+{% for i in comment %}
+<div class="card mb-2">
+    <div class="card-body">
+        <p class="card-text">{{i.content}}</p>
+        <p class="card-text"><small class="text-body-secondary">{{i.created_at}} by {{i.user}}</small></p>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <div class="card-body">
+        <p class="card-text">This review has no comments yet... Be the first commenter.</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- JavaScript to toggle comment form visibility -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showCommentFormBtn = document.getElementById('showCommentForm');
+    const commentFormCard = document.getElementById('commentFormCard');
+    const cancelCommentBtn = document.getElementById('cancelComment');
+
+    showCommentFormBtn.addEventListener('click', function() {
+        commentFormCard.style.display = 'block';
+        showCommentFormBtn.style.display = 'none';
+    });
+
+    cancelCommentBtn.addEventListener('click', function() {
+        commentFormCard.style.display = 'none';
+        showCommentFormBtn.style.display = 'inline-block';
+    });
+});
+</script>
+{% endblock content %}

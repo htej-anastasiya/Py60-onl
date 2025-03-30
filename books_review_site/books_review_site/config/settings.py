@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user',
     'books',
+    'reviews',
+    'comments',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'user', 'templates'), os.path.join(BASE_DIR, 'books', 'templates'),
-                 os.path.join(BASE_DIR, 'config', 'templates')],
+                 os.path.join(BASE_DIR, 'config', 'templates'), os.path.join(BASE_DIR, 'review', 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,3 +133,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.CustomUser'
+
+LOGIN_REDIRECT_URL = '/'

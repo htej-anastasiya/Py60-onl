@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
+from books.views import BooksList
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include("user.urls")),
     path('', include("books.urls")),
+    path('reviews/', include(("reviews.urls", "reviews"), namespace='reviews')),
 ]
