@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -106,6 +107,9 @@ class ReviewInfo(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
+        if not self.request.user.is_authenticated:
+            messages.error(self.request, "You must be logged in to comment.")
+            return redirect(self.request.path)
         comment = form.save(commit=False)
         comment.review = self.object
         comment.user = self.request.user
