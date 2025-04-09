@@ -1,0 +1,22 @@
+{%extends "base.html"%}
+{%block content%}
+    {%if books_list%}
+    {% for book in books_list %}
+<div class="card">
+      <div class="card-header">
+          <b>"{{ book.title }}"</b> by <b>{{ book.author }}</b>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ book.description|truncatechars:300 }}</p>
+        <div class="text-end">
+            <a href="{{book.get_absolute_url}}">Read more about the book</a>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+{%else%}
+<div class="d-flex justify-content-center align-items-center" style="height: 50vh;">
+    <h1 class="text-center">Sorry, there are no books found</h1>
+</div>
+{%endif%}
+{%endblock content%}
